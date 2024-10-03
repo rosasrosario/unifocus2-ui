@@ -6,11 +6,9 @@ export default function Navbar() {
     <Box>
       <Flex bg={"black"} color={"white"} py={2} px={4} align={"center"}>
         <Flex flex={1} justify={"start"}>
-          {/* Para colocar un logo*/}
           <Text textAlign={{ base: "center", md: "left" }} color={"white"}>
             Logo
           </Text>
-          {/* Para los NavLinks*/}
           <Flex display={"flex"} ml={10}>
             <DesktopNav />
           </Flex>
@@ -33,7 +31,7 @@ export default function Navbar() {
             fontWeight={600}
             color={"white"}
             bg={"orange.500"}
-            to={"/signup"}
+            to={"/register"}
             _hover={{
               bg: "white.200",
             }}
@@ -86,14 +84,6 @@ const NAV_ITEMS = [
     fontWeight: 800,
     color: "white",
 
-  },
-  {
-    label: "Login",
-    href: "/login",
-  },
-  {
-    label: "Register",
-    href: "/register",
   },
   {
     label: "Clases",
