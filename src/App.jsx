@@ -4,7 +4,8 @@ import Home from "./views/Home";
 import Login from "./views/Login";
 import Register from "./views/Register";
 import Clases from "./views/Clases";
-import Navbar from "./components/Navbar.jsx"; // Asegúrate de que esta importación sea correcta
+import Confirm from "./views/Confirm";
+import Navbar from "./components/Navbar.jsx"; 
 import { Image } from '@chakra-ui/react'
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/clases" element={<Clases />} />
+        <Route path="/confirm" element={<Confirm />} />
       </Routes>
     </>
   );

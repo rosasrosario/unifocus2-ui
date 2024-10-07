@@ -1,14 +1,20 @@
-import { Box, Flex, Text, Button, Stack, HStack } from "@chakra-ui/react";
+import { Box, Flex, Text, Button, Stack, HStack, Image } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
 
 export default function Navbar() {
   return (
     <Box>
       <Flex bg={"black"} color={"white"} py={2} px={4} align={"center"}>
-        <Flex flex={1} justify={"start"}>
-          <Text textAlign={{ base: "center", md: "left" }} color={"white"}>
-            Logo
-          </Text>
+        <Flex flex={1} justify={"start"} align="center">
+          <NavLink to="/">
+            <Image
+              src="https://i.ibb.co/W6hzzrc/UNIFOCUS.png"
+              alt="Logo"
+              boxSize="100px" // Puedes ajustar el tamaño según sea necesario
+              objectFit="contain"
+            />
+          </NavLink>
+
           <Flex display={"flex"} ml={10}>
             <DesktopNav />
           </Flex>
@@ -83,7 +89,6 @@ const NAV_ITEMS = [
     fontSize: "sm",
     fontWeight: 800,
     color: "white",
-
   },
   {
     label: "Clases",

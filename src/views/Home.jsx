@@ -1,9 +1,18 @@
 import { Box, Button, Card, HStack, Select } from '@chakra-ui/react';
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 function Home() {
   const navigate = useNavigate();
+
+  const [materia, setMateria] = useState("");
+  const [hora, setHora] = useState("");
+  const [tipo, setTipo] = useState("");
+
+  const handleBuscar = () => {
+    navigate('/clases', { state: { materia, hora, tipo } });
+  };
+
   return (
     <>
       <Box 
@@ -13,38 +22,60 @@ function Home() {
         display="flex"
         w={"100%"}
         h="700px"
-        justifyContent="left"
-        alignItems="left"
+        justifyContent="center"  // Centrar horizontalmente
+        alignItems="center"     // Centrar verticalmente
       >
         <HStack 
           bgGradient="linear(to-r, orange.300, pink.500)"
           p="30px" 
           borderRadius="30px"
+          spacing={5} // Espaciado entre los elementos
         >
           <Card bg="#000000" p={5}>
-            <Select placeholder="Elegir materia" fontSize="xl" fontWeight={600}>
-              <option value="espanol">Español</option>
-              <option value="matematicas">Matemáticas</option>
+            <Select 
+              placeholder="Elegir materia" 
+              fontSize="xl" 
+              fontWeight={600} 
+              onChange={(e) => setMateria(e.target.value)}
+            >
+              <option value="Español">Español</option>
+              <option value="Matemáticas">Matemáticas</option>
             </Select>
           </Card>
 
           <Card bg="#000000" p={5}>
-            <Select placeholder="Elegir hora" fontSize="xl" fontWeight={600}>
-              <option value="10am">10 AM</option>
-              <option value="11am">11 AM</option>
-              <option value="5pm">5 PM</option>
-              <option value="6pm">6 PM</option>
+            <Select 
+              placeholder="Elegir hora" 
+              fontSize="xl" 
+              fontWeight={600} 
+              onChange={(e) => setHora(e.target.value)}
+            >
+              <option value="10 AM">10 AM</option>
+              <option value="11 AM">11 AM</option>
+              <option value="5 PM">5 PM</option>
+              <option value="6 PM">6 PM</option>
             </Select>
           </Card>
 
           <Card bg="#000000" p={5}>
-            <Select placeholder="Elegir tipo de clase" fontSize="xl" fontWeight={600}>
-              <option value="privada">Privada</option>
-              <option value="grupo">En grupo</option>
+            <Select 
+              placeholder="Elegir tipo de clase" 
+              fontSize="xl" 
+              fontWeight={600} 
+              onChange={(e) => setTipo(e.target.value)}
+            >
+              <option value="Privada">Privada</option>
+              <option value="En grupo">En grupo</option>
             </Select>
           </Card>
 
-          <Button bg="#ff00b2" color="#ffffff" onClick={() => navigate("/clases")} fontSize="xl" fontWeight={600}>
+          <Button 
+            bg="#ff00b2" 
+            color="#ffffff" 
+            onClick={handleBuscar} 
+            fontSize="xl" 
+            fontWeight={600}
+          >
             Buscar clase
           </Button> 
         </HStack>
