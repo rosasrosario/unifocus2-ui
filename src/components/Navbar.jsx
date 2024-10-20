@@ -1,7 +1,23 @@
 import { Box, Flex, Text, Button, Stack, HStack, Image } from "@chakra-ui/react";
 import { NavLink } from "react-router-dom";
+import { useEffect, useState } from "react"; // Añadir useEffect y useState
+import axios from 'axios'; // Importar axios
 
 export default function Navbar() {
+  const [data, setData] = useState(null); // Estado para almacenar los datos de la API
+
+  useEffect(() => {
+    // Hacer la solicitud a la API cuando el componente se monta
+    axios.get('http://localhost:8000/api/products/') // Cambia a tu endpoint de la API
+      .then(response => {
+        setData(response.data); // Guardar la respuesta en el estado
+        console.log(response.data); // Mostrar los datos en consola (puedes eliminar esto luego)
+      })
+      .catch(error => {
+        console.error("Error al hacer la solicitud", error);
+      });
+  }, []); // El array vacío significa que se ejecuta solo cuando se monta el componente
+
   return (
     <Box>
       <Flex bg={"black"} color={"white"} py={2} px={4} align={"center"}>
@@ -10,7 +26,7 @@ export default function Navbar() {
             <Image
               src="https://i.ibb.co/W6hzzrc/UNIFOCUS.png"
               alt="Logo"
-              boxSize="100px" // Puedes ajustar el tamaño según sea necesario
+              boxSize="100px"
               objectFit="contain"
             />
           </NavLink>
@@ -46,6 +62,19 @@ export default function Navbar() {
           </Button>
         </HStack>
       </Flex>
+
+      {/* Aquí puedes mostrar los datos obtenidos de la API */}
+      <Box>
+        {data ? (
+          <ul>
+            {data.map(item => (
+              <li key={item.id}>{item.name} - {item.price}$</li> // Cambia según los campos que tengas
+            ))}
+          </ul>
+        ) : (
+          <Text>Cargando datos...</Text>
+        )}
+      </Box>
     </Box>
   );
 }
