@@ -3,8 +3,8 @@ import { Button } from "@chakra-ui/react";
 import Home from "./views/Home";
 import Login from "./views/Login";
 import Register from "./views/Register";
-import Clases from "./views/Clases";
-import Confirm from "./views/Confirm";
+import Lessons from "./views/Lessons";
+import Profile from "./views/Profile";
 import Navbar from "./components/Navbar.jsx"; 
 import { Image } from '@chakra-ui/react'
 
@@ -16,8 +16,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/clases" element={<Clases />} />
-        <Route path="/confirm" element={<Confirm />} />
+        <Route path="/lessons" element={<Lessons />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </>
   );

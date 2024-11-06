@@ -10,7 +10,7 @@ function Home() {
   const [tipo, setTipo] = useState("");
 
   const handleBuscar = () => {
-    navigate('/clases', { state: { materia, hora, tipo } });
+    navigate('/lessons', { state: { materia, hora, tipo } });
   };
 
   return (

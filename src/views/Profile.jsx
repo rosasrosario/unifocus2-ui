@@ -1,7 +1,7 @@
 import { Box, Card, CardBody, Heading, Text } from '@chakra-ui/react';
 import React from 'react';
 
-function Confirm() {
+function Profile() {
   return (
     <Box 
       height="100vh" 
@@ -34,4 +34,4 @@ function Confirm() {
   );
 }
 
-export default Confirm;
+export default Profile;

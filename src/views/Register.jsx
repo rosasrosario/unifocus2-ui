@@ -24,6 +24,7 @@ function Register() {
         >
         <Card bg="#000000" p={5}>
           <Input placeholder="Correo electrónico"fontSize={"xl"} fontWeight={600}></Input>
+          <Input placeholder="Usuario"fontSize={"xl"} fontWeight={600}></Input>
           <Input placeholder="Contraseña"fontSize={"xl"} fontWeight={600}></Input>
           <Button bg="#000000" color={"#ffffff"} onClick={() => navigate("/")} fontSize={"xl"} fontWeight={600}>
             Crear cuenta

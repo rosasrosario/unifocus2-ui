@@ -120,7 +120,7 @@ const NAV_ITEMS = [
     color: "white",
   },
   {
-    label: "Clases",
-    href: "/clases",
+    label: "Lessons",
+    href: "/lessons",
   },
 ];

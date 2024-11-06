@@ -2,7 +2,7 @@ import { Box, Card, CardBody, Heading, Text, Stack, Button, SimpleGrid } from '@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-function Clases() {
+function Lessons() {
   const location = useLocation();
   const navigate = useNavigate(); // Para redireccionar
 
@@ -12,15 +12,9 @@ function Clases() {
     { materia: 'Español', hora: '10 AM', profesor: 'Profesor García', tipo: 'En grupo', precio: '$100' },
     { materia: 'Español', hora: '11 AM', profesor: 'Profesor García', tipo: 'En grupo', precio: '$100' },
     { materia: 'Español', hora: '5 PM', profesor: 'Profesor García', tipo: 'En grupo', precio: '$100' },
-    { materia: 'Español', hora: '6 PM', profesor: 'Profesor García', tipo: 'En grupo', precio: '$100' },
     { materia: 'Matemáticas', hora: '10 AM', profesor: 'Profesora Pérez', tipo: 'En grupo', precio: '$100' },
     { materia: 'Matemáticas', hora: '11 AM', profesor: 'Profesora Pérez', tipo: 'En grupo', precio: '$100' },
     { materia: 'Matemáticas', hora: '5 PM', profesor: 'Profesora Pérez', tipo: 'En grupo', precio: '$100' },
-    { materia: 'Matemáticas', hora: '6 PM', profesor: 'Profesora Pérez', tipo: 'En grupo', precio: '$100' },
-    { materia: 'Español', hora: '10 AM', profesor: 'Profesora Rosas', tipo: 'Privada', precio: '$150' },
-    { materia: 'Matemáticas', hora: '10 AM', profesor: 'Profesora Zamora', tipo: 'Privada', precio: '$150' },
-    { materia: 'Matemáticas', hora: '11 AM', profesor: 'Profesora Zamora', tipo: 'Privada', precio: '$150' },
-    { materia: 'Español', hora: '11 AM', profesor: 'Profesora Rosas', tipo: 'Privada', precio: '$150' },
   ];
 
   const clasesFiltradas = clasesDisponibles.filter((clase) => {
@@ -33,7 +27,7 @@ function Clases() {
 
   // Función para redirigir al confirmar
   const handleSeleccionar = (clase) => {
-    navigate('/confirm', { state: clase }); // Envía los detalles de la clase a la página /confirm
+    navigate('/profile', { state: clase }); // Envía los detalles de la clase a la página /confirm
   };
 
   return (
@@ -83,4 +77,4 @@ function Clases() {
   );
 }
 
-export default Clases;
+export default Lessons;
