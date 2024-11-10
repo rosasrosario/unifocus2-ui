@@ -123,4 +123,8 @@ const NAV_ITEMS = [
     label: "Lessons",
     href: "/lessons",
   },
+  {
+    label: "Profile",
+    href: "/profile",
+  },
 ];
