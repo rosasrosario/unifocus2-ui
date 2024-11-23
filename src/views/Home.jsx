@@ -62,10 +62,12 @@ function Home() {
                 fontWeight={600} 
                 onChange={(e) => setHora(e.target.value)}
               >
+                <option value="9 AM">9 AM</option>
                 <option value="10 AM">10 AM</option>
                 <option value="11 AM">11 AM</option>
                 <option value="5 PM">5 PM</option>
                 <option value="6 PM">6 PM</option>
+                <option value="7 PM">7 PM</option>
               </Select>
             </Card>
             <Button 
@@ -76,9 +78,8 @@ function Home() {
                 height="60px"
                 onClick={handleBuscar}
               >
-  Buscar clase
-</Button>
-
+              Buscar clase
+            </Button>
           </HStack>
         </Box>
 
