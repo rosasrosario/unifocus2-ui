@@ -1,12 +1,11 @@
 import { Box, Button, Card, HStack, Input, Image, Text, Alert, AlertIcon, AlertTitle } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { auth, db } from "../firebase-config";
+import { auth } from "../firebase-config";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { collection, query, where, getDocs } from "firebase/firestore";
 
 function Login() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
@@ -14,37 +13,25 @@ function Login() {
 
   const handleLogin = async () => {
     try {
-      const usersRef = collection(db, "users");
-      const q = query(usersRef, where("username", "==", username));
-      const querySnapshot = await getDocs(q);
-
-      // Verificar si el nombre de usuario existe
-      if (querySnapshot.empty) {
-        setError("El nombre de usuario no existe.");
-        setSuccess(false);
-        return;
-      }
-
-      const userData = querySnapshot.docs[0].data();
-      const email = userData.email;
-
-      // Intentar iniciar sesión con el correo y la contraseña
+      // Intentar iniciar sesión con Firebase Authentication
       await signInWithEmailAndPassword(auth, email, password);
 
-      setSuccess(true);  // Mostrar mensaje de éxito
+      setSuccess(true); // Mostrar mensaje de éxito
       setError(""); // Limpiar cualquier error previo
 
       setTimeout(() => {
-        navigate("/profile");  // Redirigir después de un breve retraso
+        navigate("/profile"); // Redirigir después de un breve retraso
       }, 2000);
-
     } catch (err) {
-      // Filtramos solo el error relacionado con la contraseña incorrecta
-      if (err.code === "auth/wrong-password") {
+      // Manejo de errores específicos de Firebase Authentication
+      if (err.code === "auth/user-not-found") {
+        setError("El correo electrónico no está registrado.");
+      } else if (err.code === "auth/wrong-password") {
         setError("La contraseña es incorrecta.");
+      } else if (err.code === "auth/invalid-email") {
+        setError("El formato del correo electrónico no es válido.");
       } else {
-        // Para cualquier otro error
-        setError("La contraseña es incorrecta. Por favor, revisa los datos ingresados.");
+        setError("Ocurrió un error. Por favor, intenta de nuevo.");
       }
       setSuccess(false);
     }
@@ -61,7 +48,7 @@ function Login() {
       justifyContent="center"
       alignItems="center"
     >
-      <HStack 
+      <HStack
         bgGradient="linear(to-r, orange.300, pink.500)"
         p="30px" 
         borderRadius="30px"
@@ -73,11 +60,11 @@ function Login() {
         />
         <Card bg="#000000" p={5}>
           <Input
-            placeholder="Usuario"
+            placeholder="Correo electrónico"
             fontSize="xl"
             fontWeight={600}
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             mb={4}
           />
           <Input

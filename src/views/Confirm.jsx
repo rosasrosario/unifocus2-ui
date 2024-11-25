@@ -1,8 +1,8 @@
 import { Box, Button, Card, CardBody, Heading, Text, HStack, VStack, Divider, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, Input, useDisclosure, useToast } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { db } from '../firebase-config'; 
-import { collection, addDoc } from 'firebase/firestore';
+import { db } from '../firebase-config';
+import { collection, query, where, getDocs, addDoc } from 'firebase/firestore';
 
 function Confirm() {
   const location = useLocation();
@@ -10,7 +10,7 @@ function Confirm() {
   const clase = location.state; // Recibe la clase seleccionada desde 'Lessons'
 
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const toast = useToast();
 
   const handleCancel = () => {
@@ -24,17 +24,33 @@ function Confirm() {
     navigate('/'); // Redirigir a la página de inicio
   };
 
-  const handleAccept = async () => {
-    // Abrir el modal para solicitar el nombre de usuario
+  const handleAccept = () => {
+    // Abrir el modal para solicitar el correo electrónico
     onOpen();
   };
 
-  const handleUsernameSubmit = async () => {
-    if (username) {
+  const handleEmailSubmit = async () => {
+    if (email) {
       try {
-        // Agregar a la colección "payments" en Firestore
+        // Consultar si el correo electrónico existe en la colección "users"
+        const usersRef = collection(db, "users");
+        const q = query(usersRef, where("email", "==", email));
+        const querySnapshot = await getDocs(q);
+
+        if (querySnapshot.empty) {
+          toast({
+            title: "Correo no encontrado",
+            description: "El correo electrónico no está registrado.",
+            status: "error",
+            duration: 4000,
+            isClosable: true,
+          });
+          return;
+        }
+
+        // Si el correo existe, registra el pago
         await addDoc(collection(db, 'payments'), {
-          username: username,
+          email: email,
           classId: clase.id,
           price: clase.precio,
           timestamp: new Date(),
@@ -48,8 +64,8 @@ function Confirm() {
           isClosable: true,
         });
 
-        // Redirigir a login
-        navigate('/login');
+        // Redirigir al perfil
+        navigate('/profile');
       } catch (error) {
         console.error("Error al guardar el pago:", error);
         toast({
@@ -62,8 +78,8 @@ function Confirm() {
       }
     } else {
       toast({
-        title: "Nombre de usuario requerido",
-        description: "El nombre de usuario es necesario para continuar.",
+        title: "Correo requerido",
+        description: "El correo electrónico es necesario para continuar.",
         status: "warning",
         duration: 4000,
         isClosable: true,
@@ -143,20 +159,20 @@ function Confirm() {
         </CardBody>
       </Card>
 
-      {/* Modal para ingresar el nombre de usuario */}
+      {/* Modal para ingresar el correo electrónico */}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Por favor, ingresa tu nombre de usuario</ModalHeader>
+          <ModalHeader>Por favor, ingresa tu correo electrónico</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Input
-              placeholder="Nombre de usuario"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              placeholder="Correo electrónico"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </ModalBody>
-          <Button colorScheme="blue" onClick={handleUsernameSubmit} mt={4} w="100%">
+          <Button colorScheme="blue" onClick={handleEmailSubmit} mt={4} w="100%">
             Confirmar
           </Button>
         </ModalContent>
