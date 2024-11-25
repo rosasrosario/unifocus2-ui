@@ -65,7 +65,7 @@ function Confirm() {
         });
 
         // Redirigir al perfil
-        navigate('/profile');
+        navigate('/login');
       } catch (error) {
         console.error("Error al guardar el pago:", error);
         toast({

@@ -32,17 +32,24 @@ function Lessons() {
     );
   });
 
+  const generateFakeLink = (id) => `https://fakeclassplatform.com/class/${id}`;
+
   const saveClassToFirestore = async (clase) => {
+    const classWithLink = {
+      ...clase,
+      link: generateFakeLink(clase.id), // Agregar el enlace generado
+    };
+
     try {
-      await addDoc(collection(db, 'classes'), clase);
-      console.log('Clase guardada en Firestore:', clase);
+      await addDoc(collection(db, 'classes'), classWithLink);
+      console.log('Clase guardada en Firestore:', classWithLink);
     } catch (error) {
       console.error('Error al guardar la clase en Firestore:', error);
     }
   };
 
   const handleSeleccionar = (clase) => {
-    saveClassToFirestore(clase); // Guardar la clase en Firestore
+    saveClassToFirestore(clase); // Guardar la clase con el link en Firestore
     navigate('/confirm', { state: clase });
   };
 

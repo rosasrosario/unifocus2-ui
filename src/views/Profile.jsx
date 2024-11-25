@@ -22,6 +22,7 @@ function Profile() {
 
   const [username, setUsername] = useState("Usuario");
   const [loading, setLoading] = useState(true);
+  const [classesWithLinks, setClassesWithLinks] = useState([]);
 
   useEffect(() => {
     const fetchUsername = async () => {
@@ -39,31 +40,29 @@ function Profile() {
       } catch (err) {
         console.error("Error al obtener el username:", err);
         setUsername("Error al cargar usuario");
+      }
+    };
+
+    const fetchClassLinks = async () => {
+      try {
+        const classesRef = collection(db, "classes");
+        const classIds = clases.map((clase) => clase.id);
+
+        const classQuery = query(classesRef, where("id", "in", classIds));
+        const classSnapshot = await getDocs(classQuery);
+
+        const classesWithLinksData = classSnapshot.docs.map((doc) => doc.data());
+        setClassesWithLinks(classesWithLinksData);
+      } catch (err) {
+        console.error("Error al obtener los links de clases:", err);
       } finally {
         setLoading(false);
       }
     };
 
     fetchUsername();
-  }, [correo]);
-
-  // Función para eliminar duplicados
-  const removeDuplicates = (clases) => {
-    const uniqueClasses = [];
-    const seen = new Set();
-
-    clases.forEach((clase) => {
-      const identifier = `${clase.materia}-${clase.hora}`; // Identificador único basado en materia y hora
-      if (!seen.has(identifier)) {
-        seen.add(identifier);
-        uniqueClasses.push(clase);
-      }
-    });
-
-    return uniqueClasses;
-  };
-
-  const uniqueClases = removeDuplicates(clases);
+    fetchClassLinks();
+  }, [correo, clases]);
 
   if (loading) {
     return (
@@ -110,30 +109,42 @@ function Profile() {
               <Heading size="md" color="gray.100" mb={4}>
                 Clases confirmadas
               </Heading>
-              {uniqueClases.length > 0 ? (
+              {classesWithLinks.length > 0 ? (
                 <List spacing={3}>
-                  {uniqueClases.map((clase, index) => (
-                    <ListItem key={index}>
-                      <HStack
-                        justify="space-between"
-                        p={4}
-                        bg="purple.700"
-                        borderRadius="md"
-                      >
-                        <Text fontWeight="bold" color="white">
-                          {clase.materia}
+                {classesWithLinks.map((clase, index) => (
+                  <ListItem key={index}>
+                    <HStack
+                      justify="space-between"
+                      p={4}
+                      bg="purple.700"
+                      borderRadius="md"
+                    >
+                      <Text fontWeight="bold" color="white">
+                        {clase.materia}
+                      </Text>
+                      <VStack align="start" spacing={0}>
+                        <Text color="gray.300">Hora: {clase.hora}</Text>
+                        <Text color="gray.300">Profesor: {clase.profesor}</Text>
+                        <Text color="gray.300">
+                          Link:{" "}
+                          <Text
+                            as="a"
+                            href={clase.link || "#"}
+                            color="blue.400"
+                            textDecoration="underline"
+                            isTruncated
+                          >
+                            {clase.link || "No disponible"}
+                          </Text>
                         </Text>
-                        <VStack align="start" spacing={0}>
-                          <Text color="gray.300">Hora: {clase.hora}</Text>
-                          <Text color="gray.300">Profesor: {clase.profesor}</Text>
-                        </VStack>
-                        <Text color="green.300" fontWeight="bold">
-                          {clase.precio}
-                        </Text>
-                      </HStack>
-                    </ListItem>
-                  ))}
-                </List>
+                      </VStack>
+                      <Text color="green.300" fontWeight="bold">
+                        {clase.precio}
+                      </Text>
+                    </HStack>
+                  </ListItem>
+                ))}
+              </List>
               ) : (
                 <Text fontSize="md" color="gray.300">
                   No hay clases confirmadas.
