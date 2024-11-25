@@ -1,16 +1,4 @@
-import {
-  Box,
-  Card,
-  CardBody,
-  Heading,
-  Text,
-  VStack,
-  HStack,
-  List,
-  ListItem,
-  Image,
-  Spinner,
-} from "@chakra-ui/react";
+import {Box,Card,CardBody,Heading,Text,VStack,HStack,List,ListItem,Image,Spinner} from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { collection, query, where, getDocs } from "firebase/firestore";

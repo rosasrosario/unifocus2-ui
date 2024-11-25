@@ -14,6 +14,17 @@ function Login() {
 
   const handleLogin = async () => {
     try {
+      // Validación para redirigir a la vista de profesores si el email es "professors@unifocus.com"
+      if (email === "professors@unifocus.com" ) {
+        setSuccess(true);
+        setError("");
+        // Redirigir a la vista de profesores
+        setTimeout(() => {
+          navigate("/professors");
+        }, 2000);
+        return;
+      }
+
       // Iniciar sesión con Firebase Authentication
       await signInWithEmailAndPassword(auth, email, password);
 
