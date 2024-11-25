@@ -1,8 +1,9 @@
-import { Box, Button, Card, HStack, Input, Image, Text, Alert, AlertIcon, AlertTitle } from '@chakra-ui/react';
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { auth } from "../firebase-config";
+import { Box, Button, Card, HStack, Input, Image, Text, Alert, AlertIcon, AlertTitle } from "@chakra-ui/react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { auth, db } from "../firebase-config";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { collection, query, where, getDocs } from "firebase/firestore";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -13,14 +14,34 @@ function Login() {
 
   const handleLogin = async () => {
     try {
-      // Intentar iniciar sesión con Firebase Authentication
+      // Iniciar sesión con Firebase Authentication
       await signInWithEmailAndPassword(auth, email, password);
 
-      setSuccess(true); // Mostrar mensaje de éxito
-      setError(""); // Limpiar cualquier error previo
+      // Buscar en la colección "payments" las clases confirmadas
+      const paymentsRef = collection(db, "payments");
+      const paymentsQuery = query(paymentsRef, where("email", "==", email));
+      const paymentsSnapshot = await getDocs(paymentsQuery);
 
+      // Obtener los IDs de las clases confirmadas
+      const classIds = paymentsSnapshot.docs.map((doc) => doc.data().classId);
+
+      // Buscar en la colección "classes" los detalles de las clases confirmadas
+      const classesRef = collection(db, "classes");
+      const classesQuery = query(classesRef, where("id", "in", classIds));
+      const classesSnapshot = await getDocs(classesQuery);
+      const classesData = classesSnapshot.docs.map((doc) => doc.data());
+
+      setSuccess(true);
+      setError("");
+
+      // Redirigir al perfil con los datos necesarios
       setTimeout(() => {
-        navigate("/profile"); // Redirigir después de un breve retraso
+        navigate("/profile", {
+          state: {
+            correo: email,
+            clases: classesData,
+          },
+        });
       }, 2000);
     } catch (err) {
       // Manejo de errores específicos de Firebase Authentication
@@ -38,7 +59,7 @@ function Login() {
   };
 
   return (
-    <Box 
+    <Box
       backgroundImage="https://static.vecteezy.com/system/resources/previews/007/114/311/non_2x/abstract-yellow-and-pink-gradient-background-perfect-for-promotion-presentation-wallpaper-design-etc-vector.jpg"
       backgroundSize="cover"
       backgroundPosition="center"
@@ -50,7 +71,7 @@ function Login() {
     >
       <HStack
         bgGradient="linear(to-r, orange.300, pink.500)"
-        p="30px" 
+        p="30px"
         borderRadius="30px"
       >
         <Image
@@ -96,7 +117,7 @@ function Login() {
             fontWeight={600}
           >
             Iniciar sesión
-          </Button>  
+          </Button>
         </Card>
       </HStack>
     </Box>
